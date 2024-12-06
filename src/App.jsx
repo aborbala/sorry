@@ -6,6 +6,7 @@ const App = () => {
   const [section2Count, setSection2Count] = useState(0);
 
   const currentMonthDate = `${new Date().toISOString().slice(0, 7)}-01`; // YYYY-MM-01
+  const currentMonthName = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(new Date()); // e.g., "December"
 
   // Fetch counts from Supabase
   const fetchCounts = async () => {
@@ -56,6 +57,7 @@ const App = () => {
   return (
     <div>
       <h1>Monthly Counter</h1>
+      <h2>{currentMonthName}</h2>
       <div>
         <h2>F</h2>
         <button onClick={() => handleSection1Count(1)}>+</button>
