@@ -57,13 +57,13 @@ const App = () => {
     <div>
       <h1>Monthly Counter</h1>
       <div>
-        <h2>Section 1</h2>
+        <h2>F</h2>
         <button onClick={() => handleSection1Count(1)}>+</button>
         <button onClick={() => handleSection1Count(-1)}>-</button>
         <p>Count: {section1Count}</p>
       </div>
       <div>
-        <h2>Section 2</h2>
+        <h2>A</h2>
         <button onClick={() => handleSection2Count(1)}>+</button>
         <button onClick={() => handleSection2Count(-1)}>-</button>
         <p>Count: {section2Count}</p>
