@@ -56,6 +56,11 @@ const App = () => {
 
   return (
     <div>
+       <img
+        src="https://static.wixstatic.com/media/e6f56d_a2b47380e8504300bfb2844e4a8a5159~mv2.gif"
+        alt="banana"
+        style={{ width: '30px' }}
+      />
       <h1>Monthly Counter</h1>
       <h2>{currentMonthName}</h2>
       <div>
