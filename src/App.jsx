@@ -9,7 +9,7 @@ const App = () => {
   const currentMonthDate = `${new Date().toISOString().slice(0, 7)}-01`; // YYYY-MM-01
   const currentMonthName = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(new Date()); // e.g., "December"
 
-  // Fetch counts for the current month from Supabase
+  // Fetch counts from Supabase
   const fetchCounts = async () => {
     const { data, error } = await supabase
       .from('counts')
@@ -25,12 +25,12 @@ const App = () => {
     }
   };
 
-  // Fetch all data for the table
+  // Fetch all table data from Supabase
   const fetchTableData = async () => {
     const { data, error } = await supabase
       .from('counts')
       .select('*')
-      .order('month', { ascending: true });
+      .order('month', { ascending: false });
 
     if (error) {
       console.error('Error fetching table data:', error);
@@ -41,16 +41,19 @@ const App = () => {
 
   // Update counts in Supabase
   const updateCounts = async (newFelixCount, newAnnaCount) => {
-    const { error } = await supabase.from('counts').upsert({
-      month: currentMonthDate, // Full date (YYYY-MM-01)
-      felix: newFelixCount,
-      anna: newAnnaCount,
-    }, { onConflict: 'month' });
+    const { error } = await supabase.from('counts').upsert(
+      {
+        month: currentMonthDate, // Full date (YYYY-MM-01)
+        felix: newFelixCount,
+        anna: newAnnaCount,
+      },
+      { onConflict: 'month' }
+    );
 
     if (error) {
       console.error('Error updating/inserting counts:', error);
     } else {
-      fetchTableData(); // Refresh table data
+      fetchTableData(); // Refresh table data after updating counts
     }
   };
 
@@ -69,16 +72,11 @@ const App = () => {
 
   useEffect(() => {
     fetchCounts(); // Fetch data on component mount
-    fetchTableData(); // Fetch table data on component mount
+    fetchTableData();
   }, []);
 
   return (
     <div>
-      <img
-        src="https://static.wixstatic.com/media/e6f56d_a2b47380e8504300bfb2844e4a8a5159~mv2.gif"
-        alt="banana"
-        style={{ width: '30px' }}
-      />
       <h1>Monthly Counter</h1>
       <h2>{currentMonthName}</h2>
       <div>
@@ -93,7 +91,8 @@ const App = () => {
         <button onClick={() => handleSection2Count(-1)}>-</button>
         <p>Count: {section2Count}</p>
       </div>
-      <h2>Monthly Data</h2>
+
+      <h2>Monthly Records</h2>
       <table border="1">
         <thead>
           <tr>
@@ -105,9 +104,27 @@ const App = () => {
         <tbody>
           {tableData.map((row) => (
             <tr key={row.month}>
-              <td>{new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date(row.month))}</td>
-              <td>{row.anna || 0}</td>
-              <td>{row.felix || 0}</td>
+              <td>{new Date(row.month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</td>
+              <td>
+                {row.anna}
+                {row.anna < row.felix && (
+                  <img
+                    src="https://static.wixstatic.com/media/e6f56d_a2b47380e8504300bfb2844e4a8a5159~mv2.gif"
+                    alt="banana"
+                    style={{ width: '20px', marginLeft: '5px' }}
+                  />
+                )}
+              </td>
+              <td>
+                {row.felix}
+                {row.felix < row.anna && (
+                  <img
+                    src="https://static.wixstatic.com/media/e6f56d_a2b47380e8504300bfb2844e4a8a5159~mv2.gif"
+                    alt="banana"
+                    style={{ width: '20px', marginLeft: '5px' }}
+                  />
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
