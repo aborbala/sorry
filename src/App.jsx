@@ -96,36 +96,104 @@ const App = () => {
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }`}</style>
+         {/* Kitschy Score Display */}
+      <div
+        style={{
+          margin: '20px auto',
+          textAlign: 'center',
+          fontFamily: "'Comic Sans MS', cursive, sans-serif",
+          fontSize: '3rem',
+          color: '#fff',
+          textShadow: '2px 2px 0 #000, -2px -2px 0 #000',
+          backgroundColor: 'hotpink',
+          border: '5px dashed yellow',
+          padding: '20px',
+          animation: 'blink 1s infinite',
+          width: '80%',
+        }}
+      >
+        <marquee behavior="alternate" scrollamount="10">
+          ⚡️ {new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date())}: Felix {section1Count} vs. Anna {section2Count} ⚡️
+        </marquee>
+      </div>
 
       <div>
-        <h1>Monthly Counter</h1>
-        <h2>{currentMonthName}</h2>
-        <div>
-          <h2>Felix</h2>
-          <button onClick={() => handleSection1Count(1)}>+</button>
-          <button
-            onClick={() => handleSection1Count(-1)}
-            disabled={section1Count === 0}
-          >
-            -
-          </button>
-          <p>Count: {section1Count}</p>
-        </div>
-        <div>
-          <h2>Anna</h2>
-          <button onClick={() => handleSection2Count(1)}>+</button>
-          <button
-            onClick={() => handleSection2Count(-1)}
-            disabled={section2Count === 0}
-          >
-            -
-          </button>
-          <p>Count: {section2Count}</p>
+{/* Controls - aligned center with gap */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+          gap: '40px',
+          margin: '20px 0',
+        }}
+      >
+        {/* Felix Control */}
+        <div style={{
+          backgroundColor: '#ff69b4',
+          padding: '10px',
+          borderRadius: '10px',
+          boxShadow: '0 0 10px #ff1493',
+          textAlign: 'center',
+          width: '160px',
+        }}>
+          <h2 style={{
+            fontFamily: "'Comic Sans MS', cursive, sans-serif",
+            fontSize: '2rem',
+            margin: '0',
+            textShadow: '1px 1px 0 #000',
+          }}>Felix</h2>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', margin: '10px 0' }}>
+            <button onClick={() => handleSection1Count(1)} style={{ fontSize: '1.5rem' }}>+</button>
+            <button onClick={() => handleSection1Count(-1)} disabled={section1Count === 0} style={{ fontSize: '1.5rem' }}>-</button>
+          </div>
         </div>
 
-        <h2>Monthly Records</h2>
-        <table border="1">
-          <thead>
+        {/* Anna Control */}
+        <div style={{
+          backgroundColor: '#00ffff',
+          padding: '10px',
+          borderRadius: '10px',
+          boxShadow: '0 0 10px #00ced1',
+          textAlign: 'center',
+          width: '160px',
+        }}>
+          <h2 style={{
+            fontFamily: "'Comic Sans MS', cursive, sans-serif",
+            fontSize: '2rem',
+            margin: '0',
+            textShadow: '1px 1px 0 #000',
+          }}>Anna</h2>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', margin: '10px 0' }}>
+            <button onClick={() => handleSection2Count(1)} style={{ fontSize: '1.5rem' }}>+</button>
+            <button onClick={() => handleSection2Count(-1)} disabled={section2Count === 0} style={{ fontSize: '1.5rem' }}>-</button>
+          </div>
+        </div>
+      </div>
+
+      {/* Monthly Records - highlight higher scores (higher is worse) */}
+      <div style={{
+        margin: '20px',
+        padding: '15px',
+        background: 'linear-gradient(90deg, #ff0, #f0f, #0ff)',
+        animation: 'rainbow 5s ease infinite',
+        borderRadius: '12px',
+      }}>
+        <h2 style={{
+          textAlign: 'center',
+          fontFamily: "'Comic Sans MS', cursive, sans-serif",
+          fontSize: '2.5rem',
+          textShadow: '2px 2px 0 #000',
+          color: '#000',
+        }}>Monthly Records (Higher Is Worse!)</h2>
+        <table border="3" style={{
+          width: '100%',
+          borderColor: 'magenta',
+          fontFamily: "'Comic Sans MS', cursive, sans-serif",
+          textAlign: 'center',
+          backgroundColor: '#fff0f5',
+        }}>
+          <thead style={{ backgroundColor: 'purple', color: 'white' }}>
             <tr>
               <th>Month</th>
               <th>Anna</th>
@@ -134,30 +202,25 @@ const App = () => {
           </thead>
           <tbody>
             {tableData.map((row) => (
-              <tr key={row.month}>
-                <td>
-                  {new Date(row.month).toLocaleDateString("en-US", {
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </td>
-                <td>
+              <tr key={row.month} style={{ borderBottom: '2px dashed hotpink' }}>
+                <td style={{ padding: '8px' }}>{new Date(row.month).toLocaleDateString("en-US", { month: "long", year: "numeric" })}</td>
+                <td style={{ padding: '8px' }}>
                   {row.anna}
                   {row.anna < row.felix && (
                     <img
                       src="https://static.wixstatic.com/media/e6f56d_a2b47380e8504300bfb2844e4a8a5159~mv2.gif"
-                      alt="banana"
-                      style={{ width: "20px", marginLeft: "5px" }}
+                      alt="prosciutto"
+                      style={{ width: "24px", marginLeft: "6px" }}
                     />
                   )}
                 </td>
-                <td>
+                <td style={{ padding: '8px' }}>
                   {row.felix}
                   {row.felix < row.anna && (
                     <img
                       src="https://static.wixstatic.com/media/e6f56d_a2b47380e8504300bfb2844e4a8a5159~mv2.gif"
-                      alt="banana"
-                      style={{ width: "20px", marginLeft: "5px" }}
+                      alt="prosciutto"
+                      style={{ width: "24px", marginLeft: "6px" }}
                     />
                   )}
                 </td>
@@ -165,6 +228,8 @@ const App = () => {
             ))}
           </tbody>
         </table>
+      </div>
+
       </div>
     </>
   );
