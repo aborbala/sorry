@@ -32,6 +32,7 @@ const App = () => {
       console.error("Error fetching table data:", err);
     }
   };
+
   // Push updates to Sheets API
   const updateCounts = async (newFelix, newAnna) => {
     try {
@@ -51,14 +52,17 @@ const App = () => {
     }
   };
 
+  // Prevent negative counts
   const handleSection1Count = (delta) => {
     const next = section1Count + delta;
+    if (next < 0) return;
     setSection1Count(next);
     updateCounts(next, section2Count);
   };
 
   const handleSection2Count = (delta) => {
     const next = section2Count + delta;
+    if (next < 0) return;
     setSection2Count(next);
     updateCounts(section1Count, next);
   };
@@ -75,13 +79,23 @@ const App = () => {
       <div>
         <h2>Felix</h2>
         <button onClick={() => handleSection1Count(1)}>+</button>
-        <button onClick={() => handleSection1Count(-1)}>-</button>
+        <button
+          onClick={() => handleSection1Count(-1)}
+          disabled={section1Count === 0}
+        >
+          -
+        </button>
         <p>Count: {section1Count}</p>
       </div>
       <div>
         <h2>Anna</h2>
         <button onClick={() => handleSection2Count(1)}>+</button>
-        <button onClick={() => handleSection2Count(-1)}>-</button>
+        <button
+          onClick={() => handleSection2Count(-1)}
+          disabled={section2Count === 0}
+        >
+          -
+        </button>
         <p>Count: {section2Count}</p>
       </div>
 
