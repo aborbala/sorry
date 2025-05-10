@@ -8,8 +8,8 @@ deployed: https://sorry-drab.vercel.app/
 
 * Node.js v14+ (v20+ recommended)
 * npm (comes with Node.js)
-* A Google Service Account with access to the target Google Sheet -> admin: Anna
-* The ID of the Google Spreadsheet and the service account credentials
+* A Google Service Account with access to the target Google Sheet (admin: Anna)
+* The ID of the Google Spreadsheet and service account credentials
 
 ---
 
@@ -24,14 +24,12 @@ cd <your-repo-folder>
 
 ## 2. Set Up Environment Variables
 
-Create a `.env` file in the project root (next to `package.json`) with the following values:
+Create a `.env` file in the project root (next to `package.json`) with:
 
 ```
-# Google Sheet configuration
-dotenv_config_path=.env
 SHEET_ID=<your-spreadsheet-id>
 GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL=<your-service-account-email>
-GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY=<your-private-key-with-\\n-line-breaks>
+GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY=<your-private-key-with-\n-line-breaks>
 ```
 
 > **Do not** commit `.env` to version control.
@@ -40,79 +38,63 @@ GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY=<your-private-key-with-\\n-line-breaks>
 
 ## 3. Install Dependencies
 
-Install both server and client dependencies in one go:
-
 ```bash
 npm install
 ```
 
 ---
 
-## 4. Running the Express API Server
+## 4. Running Locally (Frontend + API)
 
-The server exposes three endpoints under `/api`:
+We use one command to run both the React dev server and the Vercel functions emulator:
 
-* **GET /api/counts?month=YYYY-MM-01**: Returns JSON: `{ felix: number, anna: number }` for the specified month.
-* **GET /api/table**: Returns full table of all months: `[{ month, felix, anna }, ...]`.
-* **POST /api/counts**: Accepts JSON `{ month, felix, anna }` to upsert the counts for the given month.
+1. **Install dev dependency (once):**
+   ```bash
+   npm install --save-dev concurrently
+   ```
 
-To start the server locally:
+2. **Run both servers:**
+   ```bash
+   npm run dev
+   ```
 
-```bash
-npm run start:server
-```
+   This launches:
+   - **Vite** on http://localhost:5173 (React app with HMR)
+   - **Vercel dev** on http://localhost:3000 (your `/api` functions)
 
-You should see:
-
-```
-Sheets API listening on http://localhost:3001
-```
-
-#### Example API Queries
-
-* Fetch counts for May 2025:
-
-  ```bash
-  curl "http://localhost:3001/api/counts?month=2025-05-01"
-  ```
-
-* Fetch entire table:
-
-  ```bash
-  curl "http://localhost:3001/api/table"
-  ```
-
-* Upsert counts (e.g. 3 and 5):
-
-  ```bash
-  curl -X POST http://localhost:3001/api/counts \
-    -H "Content-Type: application/json" \
-    -d '{ "month": "2025-05-01", "felix": 3, "anna": 5 }'
-  ```
+3. **Proxy setup:**
+   The Vite config proxies `/api/*` to `http://localhost:3000`, so in your browser:
+   - App: http://localhost:5173/
+   - API: http://localhost:5173/api/counts?month=2025-05-01 and http://localhost:5173/api/table
 
 ---
 
-## 5. Running the React Frontend
+## 5. Preview Production Build Locally
 
-The React app is configured with a Vite proxy that forwards `/api/*` to `http://localhost:3001`.
-
-To start the frontend in development mode:
+To serve the built static files without the API emulator:
 
 ```bash
-npm run dev
+npm run preview
 ```
 
-## 7. Deployment Notes
+Open http://localhost:4173 to see the production build of the React app.
 
-* **Ver cel**
+---
 
-  * Copy the contents of `/api` into the `api/` folder at the repo root.
-  * In Vercel Dashboard, set the same environment variables (`SHEET_ID`, `GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL`, `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY`).
-  * Push to the main branch and Vercel will build and deploy both the frontend and serverless functions.
+## 6. Deployment Notes
 
-* **Other Platforms**
+### Vercel
 
-  * Ensure your platform supports Node serverless functions or a Node server.
-  * Provide the environment variables in the hosting configuration.
+1. Ensure your `/api` folder (with `counts.js` and `table.js`) is in the repo root.
+2. In Vercel Dashboard → Settings → Environment Variables, add:
+   - `SHEET_ID`
+   - `GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL`
+   - `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` (with literal `\n` line-breaks)
+3. Push to your main branch. Vercel will:
+   - Run `npm run build` (builds your React app)
+   - Deploy your `/api` functions automatically
 
+### Other Platforms
 
+- Host must support Node serverless functions or a Node process.
+- Provide equivalent environment variables in the hosting configuration.
