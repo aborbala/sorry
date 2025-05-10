@@ -185,7 +185,7 @@ const App = () => {
           fontSize: '2.5rem',
           textShadow: '2px 2px 0 #000',
           color: '#000',
-        }}>Monthly Records (Higher Is Worse!)</h2>
+        }}>Monthly Records</h2>
         <table border="3" style={{
           width: '100%',
           borderColor: 'magenta',
@@ -202,7 +202,7 @@ const App = () => {
           </thead>
           <tbody>
             {tableData.map((row) => (
-              <tr key={row.month} style={{ borderBottom: '2px dashed hotpink' }}>
+              <tr key={row.month} style={{ borderBottom: '2px dashed hotpink', color: '#000' }}>
                 <td style={{ padding: '8px' }}>{new Date(row.month).toLocaleDateString("en-US", { month: "long", year: "numeric" })}</td>
                 <td style={{ padding: '8px' }}>
                   {row.anna}
