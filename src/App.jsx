@@ -73,75 +73,100 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Monthly Counter</h1>
-      <h2>{currentMonthName}</h2>
-      <div>
-        <h2>Felix</h2>
-        <button onClick={() => handleSection1Count(1)}>+</button>
-        <button
-          onClick={() => handleSection1Count(-1)}
-          disabled={section1Count === 0}
-        >
-          -
-        </button>
-        <p>Count: {section1Count}</p>
+    <>
+      {/* Rainbow banner with marquee */}
+      <div
+        style={{
+          width: '100%',
+          overflow: 'hidden',
+          background: 'linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet)',
+          backgroundSize: '1400% 1400%',
+          animation: 'rainbow 5s ease infinite',
+          textAlign: 'center',
+          padding: '10px',
+        }}
+      >
+        <marquee behavior="scroll" scrollamount="5">
+          🚀🎉 New Release: v2 Out! 🎉🚀 Negative values are now not allowed! Available NOW!
+        </marquee>
       </div>
-      <div>
-        <h2>Anna</h2>
-        <button onClick={() => handleSection2Count(1)}>+</button>
-        <button
-          onClick={() => handleSection2Count(-1)}
-          disabled={section2Count === 0}
-        >
-          -
-        </button>
-        <p>Count: {section2Count}</p>
-      </div>
+      {/* Keyframes for background animation */}
+      <style>{`@keyframes rainbow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }`}</style>
 
-      <h2>Monthly Records</h2>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>Month</th>
-            <th>Anna</th>
-            <th>Felix</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tableData.map((row) => (
-            <tr key={row.month}>
-              <td>
-                {new Date(row.month).toLocaleDateString("en-US", {
-                  month: "long",
-                  year: "numeric",
-                })}
-              </td>
-              <td>
-                {row.anna}
-                {row.anna < row.felix && (
-                  <img
-                    src="https://static.wixstatic.com/media/e6f56d_a2b47380e8504300bfb2844e4a8a5159~mv2.gif"
-                    alt="banana"
-                    style={{ width: "20px", marginLeft: "5px" }}
-                  />
-                )}
-              </td>
-              <td>
-                {row.felix}
-                {row.felix < row.anna && (
-                  <img
-                    src="https://static.wixstatic.com/media/e6f56d_a2b47380e8504300bfb2844e4a8a5159~mv2.gif"
-                    alt="banana"
-                    style={{ width: "20px", marginLeft: "5px" }}
-                  />
-                )}
-              </td>
+      <div>
+        <h1>Monthly Counter</h1>
+        <h2>{currentMonthName}</h2>
+        <div>
+          <h2>Felix</h2>
+          <button onClick={() => handleSection1Count(1)}>+</button>
+          <button
+            onClick={() => handleSection1Count(-1)}
+            disabled={section1Count === 0}
+          >
+            -
+          </button>
+          <p>Count: {section1Count}</p>
+        </div>
+        <div>
+          <h2>Anna</h2>
+          <button onClick={() => handleSection2Count(1)}>+</button>
+          <button
+            onClick={() => handleSection2Count(-1)}
+            disabled={section2Count === 0}
+          >
+            -
+          </button>
+          <p>Count: {section2Count}</p>
+        </div>
+
+        <h2>Monthly Records</h2>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Anna</th>
+              <th>Felix</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {tableData.map((row) => (
+              <tr key={row.month}>
+                <td>
+                  {new Date(row.month).toLocaleDateString("en-US", {
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </td>
+                <td>
+                  {row.anna}
+                  {row.anna < row.felix && (
+                    <img
+                      src="https://static.wixstatic.com/media/e6f56d_a2b47380e8504300bfb2844e4a8a5159~mv2.gif"
+                      alt="banana"
+                      style={{ width: "20px", marginLeft: "5px" }}
+                    />
+                  )}
+                </td>
+                <td>
+                  {row.felix}
+                  {row.felix < row.anna && (
+                    <img
+                      src="https://static.wixstatic.com/media/e6f56d_a2b47380e8504300bfb2844e4a8a5159~mv2.gif"
+                      alt="banana"
+                      style={{ width: "20px", marginLeft: "5px" }}
+                    />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 
